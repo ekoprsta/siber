@@ -1,39 +1,36 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Attendances', {
+    await queryInterface.createTable('Classes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      attendanceType: {
+      className: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      attendanceDate: {
+      pembicara: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      classType: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      date: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      remarks: {
+      time: {
+        allowNull: false,
+        type: Sequelize.TIME
+      },
+      flyer: {
+        allowNull: false,
         type: Sequelize.STRING
-      },
-      userId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id"
-        }
-      },
-      classId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Classes",
-          key: "id"
-        }
       },
       createdAt: {
         allowNull: false,
@@ -46,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Attendances');
+    await queryInterface.dropTable('Classes');
   }
 };

@@ -33,6 +33,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
+      role: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'User'
+      },
       occupation: {
         allowNull: false,
         type: Sequelize.STRING
@@ -52,6 +57,10 @@ module.exports = {
           model : "Departments",
           key : "id"
         }
+      },
+      isLogin: {
+        type: Sequelize.STRING,
+        defaultValue: 'N'
       },
       createdAt: {
         allowNull: false,

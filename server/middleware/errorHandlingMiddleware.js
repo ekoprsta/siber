@@ -21,6 +21,9 @@ function errorHandler(err, req, res, next){
   } else if ('Forbidden'){
     code = 403
     messages = 'Forbidden'
+  } else if ('isLogin'){
+    code = 500
+    messages = 'Already Login' 
   } else if ('BadRequest'){
     code = 403
     messages = 'Bad Request'

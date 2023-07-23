@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.belongsTo(models.Department, {foreignKey: "departmentId"})
-      User.hasMany(models.Attendance, {foreignKey: "userId"})
-
+      User.hasMany(models.Attendance, {foreignKey: "userId", as: "userAttendance"})
+      User.belongsToMany(models.Class, {through: "Attendance", as: "userClass", foreignKey: "userId"})
     }
   }
   User.init({
@@ -98,6 +98,18 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Role can't be empty"
+        },
+        notEmpty: {
+          msg: "Role can't be an empty string"
+        }
+      }
+    },
     occupation: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -134,7 +146,8 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    departmentId: DataTypes.INTEGER
+    departmentId: DataTypes.INTEGER,
+    isLogin: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

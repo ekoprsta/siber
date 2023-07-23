@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Attendance.belongsTo(models.User, {foreignKey: "userId"})
+      Attendance.belongsTo(models.Class, {foreignKey: "classId"})
     }
   }
   Attendance.init({
@@ -40,7 +41,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     remarks: DataTypes.STRING,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    classId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Attendance',
