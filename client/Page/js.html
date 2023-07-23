@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS Page</title>
+	<!--<script type="text/javascript" src="javascript/learn-to-code.js"></script>-->
+</head>
+<body>
+
+	<h2>JavaScript Array Sort</h2>
+	<p>Click here to sort Array alphabetically or numerically</p>
+	<button onclick="myFunction1()">Sort Alphabetically</button>
+	<button onclick="myFunction2()">Sort Numerically Ascending</button>
+	<button onclick="myFunction3()">Sort Numerically Descending</button>
+	<button onclick="myFunction4()">Find Max</button>
+	<button onclick="myFunction5()">Find Min</button>
+	<button onclick="myFunction6()">Show birthdate</button><br>
+	
+
+	<p id="demo"></p>
+	
+
+	<p>Click below button to choose date format to display</p>
+	<button onclick="tanggal1()">Default display</button>
+	<button onclick="tanggal2()">UTC Format</button>
+	<button onclick="tanggal3()">Date Format</button>
+	<button onclick="tanggal4()">ISO Format</button>
+	<button onclick="tanggal5()">Covert to Msec</button>
+
+	<p id="demo1"></p>
+	<br/>
+	<p>Please input your age and click the button to check : </p>
+	<input id="age" value="19" />
+	<button onclick="cek()">Check</button>
+
+	<p id="demo2"></p>
+
+
+
+	<script>
+		var point = [23, 10, 11, 9, 102, 30, 3, 76, 42, 51, 99, 63];
+		var max = myArrayMax(point);
+		var min = myArrayMin(point);
+		var d = new Date(95, 9, 23);
+		var tgl = new Date();
+
+		//document.getElementById("demo").innerHTML = point;
+		//document.getElementById("demo").innerHTML = max;
+
+		function myFunction1() {
+			point.sort();
+			document.getElementById("demo").innerHTML = point;
+		}
+
+		function myFunction2() {
+			point.sort(function(a, b){return a - b});
+			document.getElementById("demo").innerHTML = point;
+		}
+
+		function myFunction3() {
+			point.sort(function(a, b){return b - a});
+			document.getElementById("demo").innerHTML = point;
+		}
+
+		function myArrayMax(arr) {
+			return Math.max.apply(null, arr);
+
+		}
+
+		function myArrayMin(arr) {
+			return Math.min.apply(null, arr);
+
+		}
+
+		function myFunction4(){
+			document.getElementById("demo").innerHTML = max;
+		}
+
+		function myFunction5(){
+			document.getElementById("demo").innerHTML = min;
+		}
+
+		function myFunction6(){
+			document.getElementById("demo").innerHTML = d;
+		}
+
+		function tanggal1() {
+			document.getElementById("demo1").innerHTML = tgl;
+		}
+
+		function tanggal2() {
+			document.getElementById("demo1").innerHTML = tgl.toUTCString();
+		}
+
+		function tanggal3() {
+			document.getElementById("demo1").innerHTML = tgl.toDateString();
+		}
+
+		function tanggal4() {
+			document.getElementById("demo1").innerHTML = tgl.toISOString();
+		}
+
+		function tanggal5(){
+			document.getElementById("demo1").innerHTML = Date.parse(tgl);
+		}
+
+		function cek(){
+			var age, voteable;
+			age = Number(document.getElementById("age").value);
+			if (isNaN(age)) {
+				voteable = "Input is not a number";
+			} else {
+				voteable = (age < 19) ? "Too Young" : "Old Enough";
+			}
+			document.getElementById("demo2").innerHTML = voteable ;
+		}
+		
+	</script>
+</body>
+</html>
