@@ -8,12 +8,13 @@
         </h2>
         <div style="display: flex;">
           <div class="row">
-            <div class="card col-4" style="width: 18rem; margin-right: 10px;" v-for="kelas in classes" :key="kelas.id">
+            <div class="card" style="width: 18rem; margin-right: 10px;" v-for="kelas in classes" :key="kelas.id">
               <div class="card-body">
                 <h5 class="card-title">{{ kelas.className }}</h5>
                 <p class="card-text">{{ kelas.pembicara }}</p>
                 <p class="card-text">{{ kelas.classType }}</p>
                 <p class="card-text">{{ kelas.date }}</p>
+                <img :src="baseUrl + '/' + kelas.flyer" alt="" srcset="" width="80%">
                 <form class="column align-items-center" @submit.prevent="handleAbsenSubmit(kelas.id)">
                   <select class="form-select form-select-lg btn-primary mb-3" aria-label="form-select-lg" @change="setHidden(kelas.id)" v-model="key[kelas.id]" style="width: 100%;">
                     <option selected>--- SELECT TYPE ---</option>
@@ -100,6 +101,9 @@ export default {
   computed: {
     classes () {
       return this.$store.state.classes
+    },
+    baseUrl () {
+      return this.$store.state.baseUrl
     }
   }
 }
