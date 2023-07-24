@@ -49,8 +49,12 @@ router.get('/',(req, res) => {
   })
 })
 router.post('/createClass', upload.single('image'), (req, res, next) => {
-  console.log('<<>>>');
-  res.send('data has been uploaded');
+  try {
+    console.log('<<>>>');
+    res.send('data has been uploaded');
+  } catch (error) {
+    console.log(error);
+  }
 });
 router.post('/register', Controller.register)
 router.post('/login', Controller.login)

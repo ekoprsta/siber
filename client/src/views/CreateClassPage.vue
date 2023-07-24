@@ -96,7 +96,7 @@ export default {
       //   time: null,
       //   flyer: null
       // },
-      file: null,
+      image: null,
       classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dnamika Kelompok'],
       show: true
     }
@@ -117,17 +117,17 @@ export default {
     },
     uploadFlyer (event) {
       console.log(event, '<<<<eventuploadfile')
-      this.file = event.target.files[0].name
-      console.log(this.file, '<<<<<<')
+      this.image = event.target.files[0]
+      console.log(this.image, '<<<<<<')
     },
     onSubmitClass () {
       var formData = new FormData()
-      formData.append('image', this.file)
+      formData.append('image', this.image)
       console.log(formData, '<<<<<')
       axios({
         url: 'http://localhost:3003/createClass',
         method: 'POST',
-        data: this.file
+        data: formData
       })
         .then((response) => {
           // this.form.className = ''
