@@ -90,51 +90,16 @@ class Controller{
   }
 
   static async createClass(req, res, next){
-    console.log('<<>>>');
-    // const dir = path.join(__dirname, '../client/uploads/');
-    // var multer = require('multer'),
-    // fs = require('fs');
-    // const DIR = './Public/';
-    // const storage = multer.diskStorage({
-    //   destination: function (req, file, cb) {
-    //     cb(null, dir);
-    //     // const dir = path.join(__dirname, '../client/uploads/'+file.originalname);
-    //     // console.log(dir,'<<dir');
-    //     // try {
-    //     //   fs.existsSync(dir, exist => {
-    //     //     if (!exist) {
-    //     //       return fs.mkdirSync(dir, error => cb(error, dir));
-    //     //     } else {
-    //     //       return cb(null, dir);
-    //     //     }
-    //     //   })
-    //     // } catch (error) {
-    //     //   console.log(moment.tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss') + ' : ' + 'ex create folder', error);
-    //     // }
-    //   },
-    //   filename: function (req, file, cb) {
-    //     const fileName = file.originalname.toLowerCase().split(' ').join('-');
-    //     cb(null, fileName)
-    //   }
-    // });
-    // const upload = multer({ storage: storage }).single('picture');
-    // upload(req, res, err => {
-    //   if (err) throw err
-    //   // flyer = req.files.name
-    //   const {className, pembicara, date, classType, time, flyer } = req.body
-    //   console.log(className,'<<<<clasName');
-    //   // try {
-    //   //   const newClass = Class.create({
-    //   //     className, pembicara, date, classType, time, flyer
-    //   //   })
-    //   //   // res.status(201).json(newClass)
-    //   // } catch (error) {
-    //   //   console.log(error);
-    //   //   next(error)
-    //   // }
-    //   console.log('uploaded');
-    // })
-    res.send('data has been uploaded');
+    const {className, pembicara, date, classType, time, flyer } = req.body
+    try {
+      const newClass = Class.create({
+        className, pembicara, date, classType, time, flyer
+      })
+      res.status(201).json(newClass)
+    } catch (error) {
+        console.log(error);
+        next(error)
+    }
   }
 
   static async getClasses (req, res, next) {

@@ -5,6 +5,7 @@ var multer = require('multer'),
 fs = require('fs');
 
 const router = require('express').Router()
+var path = require('path')
 
 const DIR = './Public/';
 const storage = multer.diskStorage({
@@ -48,14 +49,7 @@ router.get('/',(req, res) => {
     messgae: 'home'
   })
 })
-router.post('/createClass', upload.single('image'), (req, res, next) => {
-  try {
-    console.log('<<>>>');
-    res.send('data has been uploaded');
-  } catch (error) {
-    console.log(error);
-  }
-});
+router.post('/createClass', upload.single('image'), Controller.createClass);
 router.post('/register', Controller.register)
 router.post('/login', Controller.login)
 router.patch('/logout', Controller.logout)
@@ -63,6 +57,13 @@ router.patch('/logout', Controller.logout)
 router.get('/department', Controller.getDeparments)
 router.get('/class', Controller.getClasses)
 router.post('/absen', Controller.postAbsen)
+router.get('/*.png', (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, '../Public/' + req.originalUrl));
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 router.use(errorHandler)
 

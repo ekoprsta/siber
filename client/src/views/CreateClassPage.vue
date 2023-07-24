@@ -7,7 +7,7 @@
         <br />
         <br />
         <b-form @submit.prevent="onSubmitClass" @reset.prevent="onResetClass" v-if="show" enctype="multipart/form-data">
-          <!-- <b-form-group
+          <b-form-group
             id="input-group-1"
             label="Tema Perkuliahan:"
             label-for="input-1"
@@ -52,7 +52,7 @@
               v-model="form.time"
               required
             ></b-form-input>
-          </b-form-group> -->
+          </b-form-group>
           <b-form-group id="input-group-6" label="Flyer :" label-for="image">
             <b-form-file
               id="image"
@@ -68,9 +68,9 @@
           <b-button type="submit" variant="primary">Submit</b-button>
           <b-button type="reset" variant="danger">Reset</b-button>
         </b-form>
-        <!-- <b-card class="mt-3" header="Form Data Result">
+        <b-card class="mt-3" header="Form Data Result">
           <pre class="m-0">{{ form }}</pre>
-        </b-card> -->
+        </b-card>
       </main>
     </div>
   </div>
@@ -88,14 +88,14 @@ export default {
   },
   data () {
     return {
-      // form: {
-      //   className: '',
-      //   pembicara: '',
-      //   date: '',
-      //   classType: null,
-      //   time: null,
-      //   flyer: null
-      // },
+      form: {
+        className: '',
+        pembicara: '',
+        date: '',
+        classType: null,
+        time: null,
+        flyer: null
+      },
       image: null,
       classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dnamika Kelompok'],
       show: true
@@ -109,6 +109,7 @@ export default {
       this.form.date = ''
       this.form.time = ''
       this.form.classType = null
+      this.image = null
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {
@@ -118,23 +119,29 @@ export default {
     uploadFlyer (event) {
       console.log(event, '<<<<eventuploadfile')
       this.image = event.target.files[0]
+      this.form.flyer = event.target.files[0].name
       console.log(this.image, '<<<<<<')
+      console.log(window.location.origin)
     },
     onSubmitClass () {
+      // const dataForm = JSON.stringify(this.form)
       var formData = new FormData()
       formData.append('image', this.image)
-      console.log(formData, '<<<<<')
+      for (var key in this.form) {
+        formData.append(key, this.form[key])
+      }
       axios({
         url: 'http://localhost:3003/createClass',
         method: 'POST',
         data: formData
       })
         .then((response) => {
-          // this.form.className = ''
-          // this.form.pembicara = ''
-          // this.form.date = ''
-          // this.form.time = ''
-          // this.form.classType = null
+          this.form.className = ''
+          this.form.pembicara = ''
+          this.form.date = ''
+          this.form.time = ''
+          this.form.classType = null
+          this.image = null
           Swal.fire({
             icon: 'success',
             title: 'OK!',
@@ -143,10 +150,11 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          // this.form.className = ''
-          // this.form.pembicara = ''
-          // this.form.date = ''
-          // this.form.classType = null
+          this.form.className = ''
+          this.form.pembicara = ''
+          this.form.date = ''
+          this.form.classType = null
+          this.image = null
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
