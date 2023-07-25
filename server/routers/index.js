@@ -53,10 +53,7 @@ router.post('/createClass', upload.single('image'), Controller.createClass);
 router.post('/register', Controller.register)
 router.post('/login', Controller.login)
 router.patch('/logout', Controller.logout)
-// router.use(authenticationMiddleWare)
 router.get('/department', Controller.getDeparments)
-router.get('/class', Controller.getClasses)
-router.post('/absen', Controller.postAbsen)
 router.get('/*.png', (req, res) => {
   try {
     res.sendFile(path.join(__dirname, '../Public/' + req.originalUrl));
@@ -64,6 +61,11 @@ router.get('/*.png', (req, res) => {
     console.log(error);
   }
 })
+router.use(authenticationMiddleWare)
+router.delete('/class/:id', Controller.deleteClass)
+router.get('/class', Controller.getClasses)
+router.post('/absen', Controller.postAbsen)
+
 
 router.use(errorHandler)
 

@@ -10,12 +10,16 @@
           <div class="row">
             <div class="card" style="width: 18rem; margin-right: 10px;" v-for="kelas in classes" :key="kelas.id">
               <div class="card-body">
+                <div style="float: right;" v-if="isAdmin">
+                  <a href=""><img src="assets/img/edit.png" alt="" height="18" width="18" style="padding: 2px;"></a>
+                  <a href="" @click.prevent="deleteClass(kelas.id)"><img src="assets/img/delete.png" alt="" height="20" width="20" style="padding: 2px;"></a>
+                </div>
                 <h5 class="card-title">{{ kelas.className }}</h5>
                 <p class="card-text">{{ kelas.pembicara }}</p>
                 <p class="card-text">{{ kelas.classType }}</p>
-                <p class="card-text">{{ kelas.date }}</p>
+                <p class="card-text">{{ new Date(kelas.date).toLocaleDateString('en-gb',{ year: 'numeric', month: 'long', day: 'numeric', timeZone:'utc'}) }} {{ kelas.time }} WIB</p>
                 <img :src="baseUrl + '/' + kelas.flyer" alt="" srcset="" width="80%">
-                <form class="column align-items-center" @submit.prevent="handleAbsenSubmit(kelas.id)">
+                <form class="column align-items-center" @submit.prevent="handleAbsenSubmit(kelas.id)" v-if="!isAdmin">
                   <select class="form-select form-select-lg btn-primary mb-3" aria-label="form-select-lg" @change="setHidden(kelas.id)" v-model="key[kelas.id]" style="width: 100%;">
                     <option selected>--- SELECT TYPE ---</option>
                     <option value="1">Absen Masuk</option>
@@ -55,11 +59,17 @@ export default {
         remarks: ''
       },
       key: [],
-      isHidden: true
+      isHidden: true,
+      isAdmin: false
     }
   },
   created () {
     this.$store.dispatch('getClass')
+    if (localStorage.getItem('role') === 'Admin') {
+      this.isAdmin = true
+    } else {
+      this.isAdmin = false
+    }
   },
   mounted () {
   },
@@ -78,6 +88,7 @@ export default {
       axios({
         url: 'http://localhost:3003/absen',
         method: 'POST',
+        headers: { accesstoken: localStorage.getItem('accesstoken') },
         data: {
           email: this.dataAbsen.user,
           attendanceType: this.dataAbsen.type,
@@ -92,6 +103,22 @@ export default {
             title: 'OK!',
             text: 'Data has been saved'
           })
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    deleteClass (id) {
+      console.log(id, '<<id')
+      axios({
+        url: `http://localhost:3003/class/${id}`,
+        method: 'DELETE',
+        headers: {
+          accesstoken: localStorage.getItem('accesstoken')
+        }
+      })
+        .then((response) => {
+          this.$store.dispatch('getClass')
         })
         .catch((error) => {
           console.log(error)

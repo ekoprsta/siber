@@ -39,7 +39,8 @@ export default new Vuex.Store({
     getClass (context) {
       axios({
         url: `${this.state.baseUrl}/class`,
-        method: 'GET'
+        method: 'GET',
+        headers: { accesstoken: localStorage.getItem('accesstoken') }
       })
         .then(({ data }) => {
           console.log(data)

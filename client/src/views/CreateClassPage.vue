@@ -97,7 +97,7 @@ export default {
         flyer: null
       },
       image: null,
-      classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dnamika Kelompok'],
+      classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],
       show: true
     }
   },
@@ -125,7 +125,7 @@ export default {
     },
     onSubmitClass () {
       // const dataForm = JSON.stringify(this.form)
-      var formData = new FormData()
+      const formData = new FormData()
       formData.append('image', this.image)
       for (var key in this.form) {
         formData.append(key, this.form[key])

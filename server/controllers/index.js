@@ -91,6 +91,8 @@ class Controller{
 
   static async createClass(req, res, next){
     const {className, pembicara, date, classType, time, flyer } = req.body
+    var dateFormatted = new Date(date).toLocaleDateString(["ban","id"])
+    console.log(dateFormatted,'<<<date');
     try {
       const newClass = Class.create({
         className, pembicara, date, classType, time, flyer
@@ -106,6 +108,20 @@ class Controller{
     try {
       const classes = await Class.findAll()
       res.status(200).json(classes)
+    } catch (error) {
+      console.log(error);
+      next(error)
+    }
+  }
+
+  static async deleteClass (req, res, next) {
+    let roleUser = req.user.role
+    if( roleUser !== 'Admin') throw { name : 'Forbidden' }
+    try {
+      const classDeleted = await Class.findByPk(req.params.id)
+      if(!classDeleted) throw { name : 'Not Found'}
+      const runDelete = await Class.destroy({ where: { id: req.params.id } } )
+      res.status(200).json({ message : `${classDeleted.dataValues.className} success deleted`})
     } catch (error) {
       console.log(error);
       next(error)
