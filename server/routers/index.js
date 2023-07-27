@@ -63,6 +63,7 @@ router.get('/*.png', (req, res) => {
 })
 router.use(authenticationMiddleWare)
 router.delete('/class/:id', Controller.deleteClass)
+router.put('/class/:id', Controller.editClass)
 router.get('/class', Controller.getClasses)
 router.post('/absen', Controller.postAbsen)
 

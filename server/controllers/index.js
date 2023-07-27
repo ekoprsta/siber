@@ -127,6 +127,18 @@ class Controller{
       next(error)
     }
   }
+
+  static async editClass (req, res, next) {
+    let roleUser = req.user.role
+    if( roleUser !== 'Admin') throw { name : 'Forbidden' }
+    try {
+      const classEdit = await Class.findByPk(req.params.id)
+      res.status(200).json(classEdit)
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
 }
 
 module.exports = Controller

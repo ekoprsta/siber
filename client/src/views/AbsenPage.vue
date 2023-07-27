@@ -11,7 +11,7 @@
             <div class="card" style="width: 18rem; margin-right: 10px;" v-for="kelas in classes" :key="kelas.id">
               <div class="card-body">
                 <div style="float: right;" v-if="isAdmin">
-                  <a href=""><img src="assets/img/edit.png" alt="" height="18" width="18" style="padding: 2px;"></a>
+                  <a href="" @click.prevent="editClass(kelas.id)"><img src="assets/img/edit.png" alt="" height="18" width="18" style="padding: 2px;"></a>
                   <a href="" @click.prevent="deleteClass(kelas.id)"><img src="assets/img/delete.png" alt="" height="20" width="20" style="padding: 2px;"></a>
                 </div>
                 <h5 class="card-title">{{ kelas.className }}</h5>
@@ -123,6 +123,10 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+    editClass (id) {
+      this.$store.dispatch('getClassById', id)
+      this.$router.push({ name: 'EditClass', params: { id } }).catch(() => {})
     }
   },
   computed: {
@@ -131,6 +135,9 @@ export default {
     },
     baseUrl () {
       return this.$store.state.baseUrl
+    },
+    classEdit () {
+      return this.$store.state.classEdit
     }
   }
 }

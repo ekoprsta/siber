@@ -9,7 +9,9 @@ export default new Vuex.Store({
   state: {
     departments: [],
     baseUrl: 'http://localhost:3003',
-    classes: []
+    classes: [],
+    classEdit: {}
+
   },
   getters: {
   },
@@ -19,8 +21,10 @@ export default new Vuex.Store({
     },
     SET_CLASSES (state, payload) {
       state.classes = payload
+    },
+    SET_CLASSEDIT (state, payload) {
+      state.classEdit = payload
     }
-
   },
   actions: {
     getDepartments (context) {
@@ -45,6 +49,20 @@ export default new Vuex.Store({
         .then(({ data }) => {
           console.log(data)
           context.commit('SET_CLASSES', data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    getClassById (context, payload) {
+      axios({
+        url: `${this.state.baseUrl}/class/${payload}`,
+        method: 'PUT',
+        headers: { accesstoken: localStorage.getItem('accesstoken') }
+      })
+        .then(({ data }) => {
+          console.log(data)
+          context.commit('SET_CLASSEDIT', data)
         })
         .catch((error) => {
           console.log(error)
