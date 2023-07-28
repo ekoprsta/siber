@@ -33,7 +33,7 @@
             <b-form-select
               id="input-3"
               v-model="this.$store.state.classEdit.classType"
-              :options="classes"
+              :options="classesEdit"
               required
             ></b-form-select>
           </b-form-group>
@@ -54,12 +54,13 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group id="input-group-6" label="Flyer :" label-for="image">
+            <img id="flyerEdit" :src="baseUrl + '/' + this.$store.state.classEdit.flyer" alt="" srcset="" width="30%" height="30%">
             <b-form-file
               id="image"
               name="image"
               type="file"
               @change="uploadFlyer"
-              placeholder="Choose a image (.jpg, .png or .gif) file or drop it here..."
+              placeholder="Choose a image (.jpg, .png or .gif) file to edit flyer"
               drop-placeholder="Drop file here..."
               accept=".jpg, .png, .gif"
               required
@@ -69,7 +70,7 @@
           <b-button type="reset" variant="danger">Reset</b-button>
         </b-form>
         <b-card class="mt-3" header="Form Data Result">
-          <pre class="m-0">{{ form }}</pre>
+          <pre class="m-0">{{ this.$store.state.classEdit }}</pre>
         </b-card>
       </main>
     </div>
@@ -97,8 +98,8 @@ export default {
         flyer: null
       },
       classEdit: this.$store.state.classEdit,
-      image: null,
-      classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],
+      imageEdit: null,
+      classesEdit: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],
       show: true
     }
   },
@@ -119,43 +120,37 @@ export default {
     },
     uploadFlyer (event) {
       console.log(event, '<<<<eventuploadfile')
-      this.image = event.target.files[0]
-      this.form.flyer = event.target.files[0].name
-      console.log(this.image, '<<<<<<')
-      console.log(window.location.origin)
+      this.imageEdit = event.target.files[0]
+      document.getElementById('flyerEdit').style.display = 'none'
+      this.$store.state.classEdit.flyer = event.target.files[0].name
     },
-    onSubmitEditClass () {
-      // const dataForm = JSON.stringify(this.form)
-      const formData = new FormData()
-      formData.append('image', this.image)
-      for (var key in this.form) {
-        formData.append(key, this.form[key])
+    onSubmitEditClass (id) {
+      id = this.$route.params.id
+      const formDataEdit = new FormData()
+      formDataEdit.append('image', this.imageEdit)
+      console.log(this.$store.state.classEdit, '<<<<<>>>>')
+      for (var key in this.$store.state.classEdit) {
+        formDataEdit.append(key, this.$store.state.classEdit[key])
       }
+      console.log(formDataEdit, '<<formDataEdit')
       axios({
-        url: 'http://localhost:3003/createClass',
-        method: 'POST',
-        data: formData
+        url: `http://localhost:3003/class/${id}`,
+        method: 'PUT',
+        data: formDataEdit,
+        headers: {
+          accesstoken: localStorage.getItem('accesstoken')
+        }
       })
         .then((response) => {
-          this.form.className = ''
-          this.form.pembicara = ''
-          this.form.date = ''
-          this.form.time = ''
-          this.form.classType = null
-          this.image = null
           Swal.fire({
             icon: 'success',
             title: 'OK!',
-            text: 'Class has been created'
+            text: 'Data has been saved'
           })
+          this.$router.push({ name: 'AbsenPage' }).catch(() => {})
         })
         .catch((error) => {
           console.log(error)
-          this.form.className = ''
-          this.form.pembicara = ''
-          this.form.date = ''
-          this.form.classType = null
-          this.image = null
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -167,12 +162,14 @@ export default {
   computed: {
     classById () {
       return this.$store.state.classEdit
+    },
+    baseUrl () {
+      return this.$store.state.baseUrl
     }
   },
   created () {
     console.log(this.$route.params.id, '<<paramsId')
     this.$store.dispatch('getClassById', this.$route.params.id)
-    this.$store.state.classEdit.date = new Date(this.$store.state.classEdit.date).toLocaleDateString('en-CA')
   }
 }
 </script>

@@ -128,12 +128,31 @@ class Controller{
     }
   }
 
-  static async editClass (req, res, next) {
+  static async getClassEdit (req, res, next) {
     let roleUser = req.user.role
     if( roleUser !== 'Admin') throw { name : 'Forbidden' }
     try {
       const classEdit = await Class.findByPk(req.params.id)
+      if(!classEdit) throw { name : 'Not Found'}
       res.status(200).json(classEdit)
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  static async editClassSave (req, res, next) {
+    console.log(req.body.className, '<<<req.body');
+    const {className, pembicara, date, classType, time, flyer } = req.body
+    let roleUser = req.user.role
+    if( roleUser !== 'Admin') throw { name : 'Forbidden' }
+    try {
+      const classEditsave = await Class.update(
+        {className, pembicara, date, classType, time, flyer},
+        { where: { id : req.params.id }, returning : true}
+      )
+      let updateData = classEditsave[1][0]
+      res.status(200).json({message : `${updateData.className} has been edited`})
     } catch (error) {
       console.log(error);
       next(error);
