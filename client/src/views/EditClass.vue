@@ -15,7 +15,7 @@
           >
             <b-form-input
               id="input-1"
-              v-model="classEdit.className"
+              v-model="this.$store.state.classEdit.className"
               type="text"
               placeholder="Enter class Subject"
               required
@@ -24,7 +24,7 @@
           <b-form-group id="input-group-2" label="Pembicara :" label-for="input-2">
             <b-form-input
               id="input-2"
-              v-model="classEdit.pembicara"
+              v-model="this.$store.state.classEdit.pembicara"
               placeholder="Nama Pembicara"
               required
             ></b-form-input>
@@ -32,7 +32,7 @@
           <b-form-group id="input-group-3" label="Jenis Kelas:" label-for="input-3">
             <b-form-select
               id="input-3"
-              v-model="classEdit.classType"
+              v-model="this.$store.state.classEdit.classType"
               :options="classes"
               required
             ></b-form-select>
@@ -41,7 +41,7 @@
             <b-form-input
               id="input-4"
               type="date"
-              v-model="classEdit.date"
+              v-model="this.$store.state.classEdit.date"
               required
             ></b-form-input>
           </b-form-group>
@@ -49,7 +49,7 @@
             <b-form-input
               id="input-5"
               type="time"
-              v-model="classEdit.time"
+              v-model="this.$store.state.classEdit.time"
               required
             ></b-form-input>
           </b-form-group>
@@ -170,8 +170,9 @@ export default {
     }
   },
   created () {
+    console.log(this.$route.params.id, '<<paramsId')
     this.$store.dispatch('getClassById', this.$route.params.id)
-    this.classEdit.date = new Date(this.classEdit.date).toLocaleDateString('en-CA')
+    this.$store.state.classEdit.date = new Date(this.$store.state.classEdit.date).toLocaleDateString('en-CA')
   }
 }
 </script>

@@ -125,7 +125,6 @@ export default {
         })
     },
     editClass (id) {
-      this.$store.dispatch('getClassById', id)
       this.$router.push({ name: 'EditClass', params: { id } }).catch(() => {})
     }
   },

@@ -23,6 +23,8 @@ export default new Vuex.Store({
       state.classes = payload
     },
     SET_CLASSEDIT (state, payload) {
+      console.log(payload, '<<<inipayload')
+      payload.date = new Date(payload.date).toLocaleDateString('en-CA')
       state.classEdit = payload
     }
   },
