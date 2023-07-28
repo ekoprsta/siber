@@ -58,7 +58,7 @@ export default new Vuex.Store({
     getClassById (context, payload) {
       axios({
         url: `${this.state.baseUrl}/class/${payload}`,
-        method: 'PUT',
+        method: 'GET',
         headers: { accesstoken: localStorage.getItem('accesstoken') }
       })
         .then(({ data }) => {

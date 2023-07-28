@@ -33,7 +33,7 @@
             <b-form-select
               id="input-3"
               v-model="this.$store.state.classEdit.classType"
-              :options="classes"
+              :options="classesEdit"
               required
             ></b-form-select>
           </b-form-group>
@@ -54,7 +54,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group id="input-group-6" label="Flyer :" label-for="image">
-            <img :src="baseUrl + '/' + this.$store.state.classEdit.flyer" alt="" srcset="" width="30%" height="30%">
+            <img id="flyerEdit" :src="baseUrl + '/' + this.$store.state.classEdit.flyer" alt="" srcset="" width="30%" height="30%">
             <b-form-file
               id="image"
               name="image"
@@ -70,7 +70,7 @@
           <b-button type="reset" variant="danger">Reset</b-button>
         </b-form>
         <b-card class="mt-3" header="Form Data Result">
-          <pre class="m-0">{{ form }}</pre>
+          <pre class="m-0">{{ this.$store.state.classEdit }}</pre>
         </b-card>
       </main>
     </div>
@@ -79,7 +79,7 @@
 
 <script>
 import axios from 'axios'
-// import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
 import SideBar from '../components/SideBar.vue'
 
 export default {
@@ -99,7 +99,7 @@ export default {
       },
       classEdit: this.$store.state.classEdit,
       imageEdit: null,
-      classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],
+      classesEdit: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],
       show: true
     }
   },
@@ -120,51 +120,43 @@ export default {
     },
     uploadFlyer (event) {
       console.log(event, '<<<<eventuploadfile')
-      this.image = event.target.files[0]
-      this.form.flyer = event.target.files[0].name
-      console.log(this.image, '<<<<<<')
-      console.log(window.location.origin)
+      this.imageEdit = event.target.files[0]
+      document.getElementById('flyerEdit').style.display = 'none'
+      this.$store.state.classEdit.flyer = event.target.files[0].name
     },
     onSubmitEditClass (id) {
       id = this.$route.params.id
-      console.log(id, '<<<ID')
-      // const dataForm = JSON.stringify(this.form)
-      const formData = new FormData()
-      formData.append('image', this.image)
-      for (var key in this.form) {
-        formData.append(key, this.form[key])
+      const formDataEdit = new FormData()
+      formDataEdit.append('image', this.imageEdit)
+      console.log(this.$store.state.classEdit, '<<<<<>>>>')
+      for (var key in this.$store.state.classEdit) {
+        formDataEdit.append(key, this.$store.state.classEdit[key])
       }
-      // axios({
-      //   url: 'http://localhost:3003/createClass',
-      //   method: 'POST',
-      //   data: formData
-      // })
-      //   .then((response) => {
-      //     this.form.className = ''
-      //     this.form.pembicara = ''
-      //     this.form.date = ''
-      //     this.form.time = ''
-      //     this.form.classType = null
-      //     this.image = null
-      //     Swal.fire({
-      //       icon: 'success',
-      //       title: 'OK!',
-      //       text: 'Class has been created'
-      //     })
-      //   })
-      //   .catch((error) => {
-      //     console.log(error)
-      //     this.form.className = ''
-      //     this.form.pembicara = ''
-      //     this.form.date = ''
-      //     this.form.classType = null
-      //     this.image = null
-      //     Swal.fire({
-      //       icon: 'error',
-      //       title: 'Oops...',
-      //       text: 'Something wrong, please check your data!'
-      //     })
-      //   })
+      console.log(formDataEdit, '<<formDataEdit')
+      axios({
+        url: `http://localhost:3003/class/${id}`,
+        method: 'PUT',
+        data: formDataEdit,
+        headers: {
+          accesstoken: localStorage.getItem('accesstoken')
+        }
+      })
+        .then((response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'OK!',
+            text: 'Data has been saved'
+          })
+          this.$router.push({ name: 'AbsenPage' }).catch(() => {})
+        })
+        .catch((error) => {
+          console.log(error)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something wrong, please check your data!'
+          })
+        })
     }
   },
   computed: {
@@ -175,22 +167,8 @@ export default {
       return this.$store.state.baseUrl
     }
   },
-  mounted () {
-    console.log(this.$store.state.classEdit, '<<<mounted')
-  },
   created () {
     this.$store.dispatch('getClassById', this.$route.params.id)
-    axios({
-      url: `http://localhost:3003/${this.$store.state.classEdit.flyer}`,
-      method: 'GET'
-    })
-      .then((response) => {
-        console.log(response, '<<<ResponseGetFLyer')
-        this.imageEdit = response
-      })
-      .catch((error) => {
-        console.log(error)
-      })
   }
 }
 </script>
