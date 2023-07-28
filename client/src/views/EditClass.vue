@@ -15,7 +15,7 @@
           >
             <b-form-input
               id="input-1"
-              v-model="classEdit.className"
+              v-model="this.$store.state.classEdit.className"
               type="text"
               placeholder="Enter class Subject"
               required
@@ -24,7 +24,7 @@
           <b-form-group id="input-group-2" label="Pembicara :" label-for="input-2">
             <b-form-input
               id="input-2"
-              v-model="classEdit.pembicara"
+              v-model="this.$store.state.classEdit.pembicara"
               placeholder="Nama Pembicara"
               required
             ></b-form-input>
@@ -32,7 +32,7 @@
           <b-form-group id="input-group-3" label="Jenis Kelas:" label-for="input-3">
             <b-form-select
               id="input-3"
-              v-model="classEdit.classType"
+              v-model="this.$store.state.classEdit.classType"
               :options="classes"
               required
             ></b-form-select>
@@ -41,7 +41,7 @@
             <b-form-input
               id="input-4"
               type="date"
-              v-model="classEdit.date"
+              v-model="this.$store.state.classEdit.date"
               required
             ></b-form-input>
           </b-form-group>
@@ -49,17 +49,18 @@
             <b-form-input
               id="input-5"
               type="time"
-              v-model="classEdit.time"
+              v-model="this.$store.state.classEdit.time"
               required
             ></b-form-input>
           </b-form-group>
           <b-form-group id="input-group-6" label="Flyer :" label-for="image">
+            <img :src="baseUrl + '/' + this.$store.state.classEdit.flyer" alt="" srcset="" width="30%" height="30%">
             <b-form-file
               id="image"
               name="image"
               type="file"
               @change="uploadFlyer"
-              placeholder="Choose a image (.jpg, .png or .gif) file or drop it here..."
+              placeholder="Choose a image (.jpg, .png or .gif) file to edit flyer"
               drop-placeholder="Drop file here..."
               accept=".jpg, .png, .gif"
               required
@@ -78,7 +79,7 @@
 
 <script>
 import axios from 'axios'
-import Swal from 'sweetalert2'
+// import Swal from 'sweetalert2'
 import SideBar from '../components/SideBar.vue'
 
 export default {
@@ -97,7 +98,7 @@ export default {
         flyer: null
       },
       classEdit: this.$store.state.classEdit,
-      image: null,
+      imageEdit: null,
       classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],
       show: true
     }
@@ -124,54 +125,72 @@ export default {
       console.log(this.image, '<<<<<<')
       console.log(window.location.origin)
     },
-    onSubmitEditClass () {
+    onSubmitEditClass (id) {
+      id = this.$route.params.id
+      console.log(id, '<<<ID')
       // const dataForm = JSON.stringify(this.form)
       const formData = new FormData()
       formData.append('image', this.image)
       for (var key in this.form) {
         formData.append(key, this.form[key])
       }
-      axios({
-        url: 'http://localhost:3003/createClass',
-        method: 'POST',
-        data: formData
-      })
-        .then((response) => {
-          this.form.className = ''
-          this.form.pembicara = ''
-          this.form.date = ''
-          this.form.time = ''
-          this.form.classType = null
-          this.image = null
-          Swal.fire({
-            icon: 'success',
-            title: 'OK!',
-            text: 'Class has been created'
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-          this.form.className = ''
-          this.form.pembicara = ''
-          this.form.date = ''
-          this.form.classType = null
-          this.image = null
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something wrong, please check your data!'
-          })
-        })
+      // axios({
+      //   url: 'http://localhost:3003/createClass',
+      //   method: 'POST',
+      //   data: formData
+      // })
+      //   .then((response) => {
+      //     this.form.className = ''
+      //     this.form.pembicara = ''
+      //     this.form.date = ''
+      //     this.form.time = ''
+      //     this.form.classType = null
+      //     this.image = null
+      //     Swal.fire({
+      //       icon: 'success',
+      //       title: 'OK!',
+      //       text: 'Class has been created'
+      //     })
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //     this.form.className = ''
+      //     this.form.pembicara = ''
+      //     this.form.date = ''
+      //     this.form.classType = null
+      //     this.image = null
+      //     Swal.fire({
+      //       icon: 'error',
+      //       title: 'Oops...',
+      //       text: 'Something wrong, please check your data!'
+      //     })
+      //   })
     }
   },
   computed: {
     classById () {
       return this.$store.state.classEdit
+    },
+    baseUrl () {
+      return this.$store.state.baseUrl
     }
+  },
+  mounted () {
+    console.log(this.$store.state.classEdit, '<<<mounted')
   },
   created () {
     this.$store.dispatch('getClassById', this.$route.params.id)
-    this.classEdit.date = new Date(this.classEdit.date).toLocaleDateString('en-CA')
+    axios({
+      url: `http://localhost:3003/${this.$store.state.classEdit.flyer}`,
+      method: 'GET'
+    })
+      .then((response) => {
+        console.log(response, '<<<ResponseGetFLyer')
+        this.imageEdit = response
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 }
 </script>

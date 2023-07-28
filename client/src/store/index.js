@@ -23,6 +23,7 @@ export default new Vuex.Store({
       state.classes = payload
     },
     SET_CLASSEDIT (state, payload) {
+      payload.date = new Date(payload.date).toLocaleDateString('en-CA')
       state.classEdit = payload
     }
   },
@@ -61,7 +62,6 @@ export default new Vuex.Store({
         headers: { accesstoken: localStorage.getItem('accesstoken') }
       })
         .then(({ data }) => {
-          console.log(data)
           context.commit('SET_CLASSEDIT', data)
         })
         .catch((error) => {
