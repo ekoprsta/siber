@@ -11,19 +11,6 @@ const DIR = './Public/';
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, DIR);
-    // const dir = path.join(__dirname, '../client/uploads/'+file.originalname);
-    // console.log(dir,'<<dir');
-    // try {
-    //   fs.existsSync(dir, exist => {
-    //     if (!exist) {
-    //       return fs.mkdirSync(dir, error => cb(error, dir));
-    //     } else {
-    //       return cb(null, dir);
-    //     }
-    //   })
-    // } catch (error) {
-    //   console.log(moment.tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss') + ' : ' + 'ex create folder', error);
-    // }
   },
   filename: function (req, file, cb) {
     const fileName = file.originalname.toLowerCase().split(' ').join('-');
@@ -63,7 +50,7 @@ router.get('/*.png', (req, res) => {
 })
 router.use(authenticationMiddleWare)
 router.delete('/class/:id', Controller.deleteClass)
-router.put('/class/:id', Controller.editClassSave)
+router.put('/class/:id', upload.single('image'), Controller.editClassSave)
 router.get('/class/:id', Controller.getClassEdit)
 router.get('/class', Controller.getClasses)
 router.post('/absen', Controller.postAbsen)

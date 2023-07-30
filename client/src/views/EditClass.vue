@@ -15,7 +15,7 @@
           >
             <b-form-input
               id="input-1"
-              v-model="this.$store.state.classEdit.className"
+              v-model="$store.state.classEdit.className"
               type="text"
               placeholder="Enter class Subject"
               required
@@ -24,7 +24,7 @@
           <b-form-group id="input-group-2" label="Pembicara :" label-for="input-2">
             <b-form-input
               id="input-2"
-              v-model="this.$store.state.classEdit.pembicara"
+              v-model="$store.state.classEdit.pembicara"
               placeholder="Nama Pembicara"
               required
             ></b-form-input>
@@ -32,7 +32,7 @@
           <b-form-group id="input-group-3" label="Jenis Kelas:" label-for="input-3">
             <b-form-select
               id="input-3"
-              v-model="this.$store.state.classEdit.classType"
+              v-model="$store.state.classEdit.classType"
               :options="classesEdit"
               required
             ></b-form-select>
@@ -41,7 +41,7 @@
             <b-form-input
               id="input-4"
               type="date"
-              v-model="this.$store.state.classEdit.date"
+              v-model="$store.state.classEdit.date"
               required
             ></b-form-input>
           </b-form-group>
@@ -49,12 +49,12 @@
             <b-form-input
               id="input-5"
               type="time"
-              v-model="this.$store.state.classEdit.time"
+              v-model="$store.state.classEdit.time"
               required
             ></b-form-input>
           </b-form-group>
           <b-form-group id="input-group-6" label="Flyer :" label-for="image">
-            <img id="flyerEdit" :src="baseUrl + '/' + this.$store.state.classEdit.flyer" alt="" srcset="" width="30%" height="30%">
+            <img id="flyerEdit" :src="baseUrl + '/' + $store.state.classEdit.flyer" alt="" srcset="" width="30%" height="30%">
             <b-form-file
               id="image"
               name="image"
@@ -63,14 +63,13 @@
               placeholder="Choose a image (.jpg, .png or .gif) file to edit flyer"
               drop-placeholder="Drop file here..."
               accept=".jpg, .png, .gif"
-              required
             ></b-form-file>
           </b-form-group>
           <b-button type="submit" variant="primary">Submit</b-button>
           <b-button type="reset" variant="danger">Reset</b-button>
         </b-form>
         <b-card class="mt-3" header="Form Data Result">
-          <pre class="m-0">{{ this.$store.state.classEdit }}</pre>
+          <pre class="m-0">{{ $store.state.classEdit }}</pre>
         </b-card>
       </main>
     </div>
@@ -83,7 +82,7 @@ import Swal from 'sweetalert2'
 import SideBar from '../components/SideBar.vue'
 
 export default {
-  name: 'CreateClassPage',
+  name: 'EditClass',
   components: {
     SideBar
   },
@@ -97,7 +96,6 @@ export default {
         time: null,
         flyer: null
       },
-      classEdit: this.$store.state.classEdit,
       imageEdit: null,
       classesEdit: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],
       show: true
@@ -168,7 +166,6 @@ export default {
     }
   },
   created () {
-    console.log(this.$route.params.id, '<<paramsId')
     this.$store.dispatch('getClassById', this.$route.params.id)
   }
 }

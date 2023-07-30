@@ -142,7 +142,7 @@ class Controller{
   }
 
   static async editClassSave (req, res, next) {
-    console.log(req.body.className, '<<<req.body');
+    console.log(req.body, '<<<req.body');
     const {className, pembicara, date, classType, time, flyer } = req.body
     let roleUser = req.user.role
     if( roleUser !== 'Admin') throw { name : 'Forbidden' }

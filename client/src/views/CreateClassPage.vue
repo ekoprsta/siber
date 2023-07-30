@@ -130,6 +130,7 @@ export default {
       for (var key in this.form) {
         formData.append(key, this.form[key])
       }
+      console.log(formData, '<<formDatacreateClass')
       axios({
         url: 'http://localhost:3003/createClass',
         method: 'POST',
