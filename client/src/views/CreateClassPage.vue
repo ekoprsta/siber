@@ -94,7 +94,9 @@ export default {
         date: '',
         classType: null,
         time: null,
-        flyer: null
+        flyer: null,
+        status: 'Not Active',
+        classCode: 'riska2023'
       },
       image: null,
       classes: [{ text: 'Select One', value: null }, 'Kelas Utama', 'Dinamika Kelompok'],

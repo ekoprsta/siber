@@ -54,6 +54,7 @@ router.put('/class/:id', upload.single('image'), Controller.editClassSave)
 router.get('/class/:id', Controller.getClassEdit)
 router.get('/class', Controller.getClasses)
 router.post('/absen', Controller.postAbsen)
+router.put('/activeClass/:id', Controller.activeClass)
 
 
 router.use(errorHandler)

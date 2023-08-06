@@ -88,6 +88,30 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "This field can't be empty"
+        },
+        notEmpty: {
+          msg: "This field can't be an empty string"
+        }
+      }
+    },
+    classCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "This field can't be empty"
+        },
+        notEmpty: {
+          msg: "This field can't be an empty string"
+        }
+      }
+    },
   }, {
     sequelize,
     modelName: 'Class',

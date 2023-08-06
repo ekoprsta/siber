@@ -32,6 +32,11 @@
                     Submit
                   </button>
                 </form>
+                <br />
+                <br />
+                <button @click.prevent="activeClass(kelas.id)" type="submit" class="btn btn-secondary btn-lg" v-if="kelas.status=='Not Active'">
+                    Active Class
+                </button>
               </div>
             </div>
           </div>
@@ -126,6 +131,22 @@ export default {
     },
     editClass (id) {
       this.$router.push({ name: 'EditClass', params: { id } }).catch(() => {})
+    },
+    activeClass (id) {
+      console.log(id, '<<<ID')
+      axios({
+        url: `http://localhost:3003/activeClass/${id}`,
+        method: 'PUT',
+        headers: {
+          accesstoken: localStorage.getItem('accesstoken')
+        }
+      })
+        .then((response) => {
+          this.$store.dispatch('getClass')
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   },
   computed: {

@@ -90,12 +90,12 @@ class Controller{
   }
 
   static async createClass(req, res, next){
-    const {className, pembicara, date, classType, time, flyer } = req.body
+    const {className, pembicara, date, classType, time, flyer, status, classCode } = req.body
     var dateFormatted = new Date(date).toLocaleDateString(["ban","id"])
     console.log(dateFormatted,'<<<date');
     try {
       const newClass = Class.create({
-        className, pembicara, date, classType, time, flyer
+        className, pembicara, date, classType, time, flyer, status, classCode
       })
       res.status(201).json(newClass)
     } catch (error) {
@@ -152,6 +152,22 @@ class Controller{
         { where: { id : req.params.id }, returning : true}
       )
       let updateData = classEditsave[1][0]
+      res.status(200).json({message : `${updateData.className} has been edited`})
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  static async activeClass (req, res, next) {
+    let roleUser = req.user.role
+    if( roleUser !== 'Admin') throw { name : 'Forbidden' }
+    try {
+      const activeClass = await Class.update(
+        {status : 'active'},
+        {where: { id : req.params.id }, returning : true}
+      )
+      let updateData = activeClass[1][0]
       res.status(200).json({message : `${updateData.className} has been edited`})
     } catch (error) {
       console.log(error);
