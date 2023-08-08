@@ -130,7 +130,7 @@ class Controller{
 
   static async getClassEdit (req, res, next) {
     let roleUser = req.user.role
-    if( roleUser !== 'Admin') throw { name : 'Forbidden' }
+    // if( roleUser !== 'Admin') throw { name : 'Forbidden' }
     try {
       const classEdit = await Class.findByPk(req.params.id)
       if(!classEdit) throw { name : 'Not Found'}

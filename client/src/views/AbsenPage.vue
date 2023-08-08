@@ -34,9 +34,11 @@
                 </form>
                 <br />
                 <br />
-                <button @click.prevent="activeClass(kelas.id)" type="submit" class="btn btn-secondary btn-lg" v-if="kelas.status=='Not Active'">
+                <button @click.prevent="activeClass(kelas.id)" type="submit" class="btn btn-secondary btn-lg" v-if="kelas.status=='Not Active' && isAdmin">
                     Active Class
                 </button>
+                <p class="card-text" style="font-size: 12px;" v-if="kelas.status=='active' && isAdmin">Clas Activated on {{ new Date(kelas.updatedAt).toLocaleDateString('en-gb',{ year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} </p>
+                <p v-if="kelas.status=='active' && isAdmin"><b> <i> Secret code : {{ kelas.classCode }} </i></b></p>
               </div>
             </div>
           </div>
@@ -65,7 +67,8 @@ export default {
       },
       key: [],
       isHidden: true,
-      isAdmin: false
+      isAdmin: false,
+      kodeKelas: ''
     }
   },
   created () {
@@ -79,7 +82,7 @@ export default {
   mounted () {
   },
   methods: {
-    setHidden (id) {
+    async setHidden (id) {
       if (this.key[id] === '2') {
         document.getElementById(id).style.display = 'block'
         this.dataAbsen.type = 'izin'
@@ -89,29 +92,52 @@ export default {
         this.dataAbsen.remarks = null
       }
     },
-    handleAbsenSubmit (id) {
-      axios({
-        url: 'http://localhost:3003/absen',
-        method: 'POST',
-        headers: { accesstoken: localStorage.getItem('accesstoken') },
-        data: {
-          email: this.dataAbsen.user,
-          attendanceType: this.dataAbsen.type,
-          remarks: this.dataAbsen.remarks,
-          classId: id
-        }
-      })
-        .then((response) => {
-          console.log('berhasil')
-          Swal.fire({
-            icon: 'success',
-            title: 'OK!',
-            text: 'Data has been saved'
+    async handleAbsenSubmit (id) {
+      console.log(id, '<<ID')
+      await this.$store.dispatch('getClassById', id)
+      if (this.dataAbsen.type === 'hadir') {
+        const { value: password } = await Swal.fire({
+          input: 'text',
+          inputLabel: 'Class Code',
+          inputPlaceholder: 'Enter class code',
+          showCancelButton: true,
+          inputValidator: (value) => {
+            if (value !== this.$store.state.classEdit.classCode) {
+              return 'You entered wrong class code'
+            }
+          },
+          inputAttributes: {
+            maxlength: 10,
+            autocapitalize: 'off',
+            autocorrect: 'off'
+          }
+        })
+
+        if (password) {
+          axios({
+            url: 'http://localhost:3003/absen',
+            method: 'POST',
+            headers: { accesstoken: localStorage.getItem('accesstoken') },
+            data: {
+              email: this.dataAbsen.user,
+              attendanceType: this.dataAbsen.type,
+              remarks: this.dataAbsen.remarks,
+              classId: id
+            }
           })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+            .then((response) => {
+              console.log('berhasil')
+              Swal.fire({
+                icon: 'success',
+                title: 'OK!',
+                text: 'Data has been saved'
+              })
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        }
+      }
     },
     deleteClass (id) {
       console.log(id, '<<id')
@@ -156,7 +182,7 @@ export default {
     baseUrl () {
       return this.$store.state.baseUrl
     },
-    classEdit () {
+    classEditss () {
       return this.$store.state.classEdit
     }
   }
