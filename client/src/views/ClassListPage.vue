@@ -3,13 +3,17 @@
     <SideBar />
     <div class="container-fluid">
       <main class="tm-main">
-        <h2 class="tm-pt-30 tm-color-primary">
-          Atendance Page
+        <h2 class="tm-pt-30 tm-color-primary" v-if="isAdmin">
+          Class List
         </h2>
         <div style="display: flex;">
           <div class="row">
             <div class="card" style="width: 18rem; margin-right: 10px;" v-for="kelas in classes" :key="kelas.id">
               <div class="card-body">
+                <div style="float: right;">
+                  <a href="" @click.prevent="editClass(kelas.id)"><img src="assets/img/edit.png" alt="" height="18" width="18" style="padding: 2px;"></a>
+                  <a href="" @click.prevent="deleteClass(kelas.id)"><img src="assets/img/delete.png" alt="" height="20" width="20" style="padding: 2px;"></a>
+                </div>
                 <h5 class="card-title">{{ kelas.className }}</h5>
                 <p class="card-text">{{ kelas.pembicara }}</p>
                 <p class="card-text">{{ kelas.classType }}</p>
@@ -54,7 +58,7 @@ import SideBar from '../components/SideBar.vue'
 import Swal from 'sweetalert2'
 
 export default {
-  name: 'AbsenPage',
+  name: 'ClassList',
   components: {
     SideBar
   },

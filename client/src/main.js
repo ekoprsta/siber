@@ -15,7 +15,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faBars, faBookOpen, faHome, faPen, faRightFromBracket, faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBookOpen, faHome, faPen, faRightFromBracket, faUserSecret, faList } from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faInstagram, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons'
 
 /* add icons to the library */
@@ -29,6 +29,7 @@ library.add(faTwitter)
 library.add(faInstagram)
 library.add(faLinkedin)
 library.add(faBars)
+library.add(faList)
 
 /* add font awesome icon component */
 Vue.component('font-awesome-icon', FontAwesomeIcon)

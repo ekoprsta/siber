@@ -19,26 +19,32 @@
         <ul>
           <li class="tm-nav-item">
             <a href="#" @click.prevent="backToHome" class="tm-nav-link">
-              <font-awesome-icon icon="fa-solid fa-house" />
+              <font-awesome-icon icon="fa-solid fa-house" style="margin-right: 5px;"/>
               Home
             </a>
           </li>
-          <li class="tm-nav-item">
+          <li class="tm-nav-item" v-if="!isAdmin">
             <a href="#" class="tm-nav-link" @click.prevent="goToAbsenPage">
-              <font-awesome-icon icon="fa-solid fa-pen" />
+              <font-awesome-icon icon="fa-solid fa-pen" style="margin-right: 5px;" />
               Absen
             </a>
           </li>
           <li class="tm-nav-item" v-if="isAdmin">
+            <a href="#" class="tm-nav-link" @click.prevent="goToClassList">
+              <font-awesome-icon icon="fa-solid fa-list" style="margin-right: 5px;" />
+              Class List
+            </a>
+          </li>
+          <li class="tm-nav-item" v-if="isAdmin">
             <a href="#" class="tm-nav-link" @click.prevent="goToCreateClass">
-              <font-awesome-icon icon="fa-solid fa-pen" />
-              Class
+              <font-awesome-icon icon="fa-solid fa-pen" style="margin-right: 5px;" />
+              Create Class
             </a>
           </li>
 
           <li class="tm-nav-item">
             <a href="#" class="tm-nav-link" @click.prevent="handleLogout">
-              <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
+              <font-awesome-icon icon="fa-solid fa-right-from-bracket" style="margin-right: 5px;" />
               Log Out
             </a>
           </li>
@@ -112,6 +118,9 @@ export default {
     },
     goToAbsenPage () {
       this.$router.push({ name: 'AbsenPage' })
+    },
+    goToClassList () {
+      this.$router.push({ name: 'ClassList' })
     },
     backToHome () {
       this.$router.push({ name: 'home' })

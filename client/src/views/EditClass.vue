@@ -53,7 +53,21 @@
               required
             ></b-form-input>
           </b-form-group>
-          <b-form-group id="input-group-6" label="Flyer :" label-for="image">
+          <b-form-group
+            id="input-group-6"
+            label="Kode Kelas :"
+            label-for="input-6"
+            description="Kode kelas yang akan dibuat"
+          >
+            <b-form-input
+              id="input-6"
+              v-model="$store.state.classEdit.classCode"
+              type="text"
+              placeholder="Enter class code"
+              required
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group id="input-group-7" label="Flyer :" label-for="image">
             <img id="flyerEdit" :src="baseUrl + '/' + $store.state.classEdit.flyer" alt="" srcset="" width="30%" height="30%">
             <b-form-file
               id="image"

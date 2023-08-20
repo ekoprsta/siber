@@ -143,12 +143,12 @@ class Controller{
 
   static async editClassSave (req, res, next) {
     console.log(req.body, '<<<req.body');
-    const {className, pembicara, date, classType, time, flyer } = req.body
+    const {className, pembicara, date, classType, time, classCode, flyer } = req.body
     let roleUser = req.user.role
     if( roleUser !== 'Admin') throw { name : 'Forbidden' }
     try {
       const classEditsave = await Class.update(
-        {className, pembicara, date, classType, time, flyer},
+        {className, pembicara, date, classType, time, classCode, flyer},
         { where: { id : req.params.id }, returning : true}
       )
       let updateData = classEditsave[1][0]
@@ -169,6 +169,22 @@ class Controller{
       )
       let updateData = activeClass[1][0]
       res.status(200).json({message : `${updateData.className} has been edited`})
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  static async finishClass (req, res, next) {
+    let roleUser = req.user.role
+    if( roleUser !== 'Admin') throw { name : 'Forbidden' }
+    try {
+      const activeClass = await Class.update(
+        {status : 'finish'},
+        {where: { id : req.params.id }, returning : true}
+      )
+      let updateData = activeClass[1][0]
+      res.status(200).json({message : `${updateData.className} has been mark as finished`})
     } catch (error) {
       console.log(error);
       next(error);

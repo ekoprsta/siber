@@ -150,6 +150,7 @@ export default {
             title: 'OK!',
             text: 'Class has been created'
           })
+          this.$router.push({ name: 'AbsenPage' })
         })
         .catch((error) => {
           console.log(error)

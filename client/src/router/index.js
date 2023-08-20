@@ -39,6 +39,11 @@ const routes = [
     path: '/edit',
     name: 'EditClass',
     component: () => import('../views/EditClass')
+  },
+  {
+    path: '/classes',
+    name: 'ClassList',
+    component: () => import('../views/ClassListPage')
   }
 ]
 
