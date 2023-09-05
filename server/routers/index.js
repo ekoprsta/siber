@@ -36,6 +36,7 @@ router.get('/',(req, res) => {
     messgae: 'home'
   })
 })
+
 router.post('/createClass', upload.single('image'), Controller.createClass);
 router.post('/register', Controller.register)
 router.post('/login', Controller.login)
@@ -56,6 +57,8 @@ router.get('/class', Controller.getClasses)
 router.post('/absen', Controller.postAbsen)
 router.put('/activeClass/:id', Controller.activeClass)
 router.put('/finishClass/:id', Controller.finishClass)
+router.get('/custom', Controller.customeQuery)
+
 
 
 router.use(errorHandler)

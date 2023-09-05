@@ -10,8 +10,8 @@ export default new Vuex.Store({
     departments: [],
     baseUrl: 'http://localhost:3003',
     classes: [],
-    classEdit: {}
-
+    classEdit: {},
+    classesUser: []
   },
   getters: {
   },
@@ -25,6 +25,9 @@ export default new Vuex.Store({
     SET_CLASSEDIT (state, payload) {
       payload.date = new Date(payload.date).toLocaleDateString('en-CA')
       state.classEdit = payload
+    },
+    SET_CLASSESUSER (state, payload) {
+      state.classesUser = payload
     }
   },
   actions: {
@@ -63,6 +66,20 @@ export default new Vuex.Store({
       })
         .then(({ data }) => {
           context.commit('SET_CLASSEDIT', data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    getClassUser (context) {
+      axios({
+        url: `${this.state.baseUrl}/custom`,
+        method: 'GET',
+        headers: { accesstoken: localStorage.getItem('accesstoken') }
+      })
+        .then(({ data }) => {
+          console.log(data)
+          context.commit('SET_CLASSESUSER', data)
         })
         .catch((error) => {
           console.log(error)

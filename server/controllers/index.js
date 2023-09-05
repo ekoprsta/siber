@@ -1,6 +1,7 @@
 const { comparePassword } = require('../helpers/bcrypt');
 const { sign } = require('../helpers/jwtHelper');
-const { User, Attendance, Department, Class } = require('../models')
+const { User, Attendance, Department, Class, sequelize } = require('../models');
+const { QueryTypes } = require('sequelize');
 var moment = require('moment-timezone');
 var path = require('path');
 
@@ -185,6 +186,20 @@ class Controller{
       )
       let updateData = activeClass[1][0]
       res.status(200).json({message : `${updateData.className} has been mark as finished`})
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  static async customeQuery (req, res, next) {
+    let roleUser = req.user.role;
+    let userEmail = req.user.email;
+    try {
+      console.log(roleUser,'<<<');
+      const classes = await sequelize.query(`Select a."email", b."attendanceType", b."attendanceDate", b."remarks", c."className", c."flyer", c."pembicara", c."status", c."date", c."time" from "Users" a JOIN "Attendances" b on a."id"=b."userId" RIGHT JOIN "Classes" c on c."id"=b."classId" WHERE a."email"='${userEmail}' or a."email" is NULL`, { type: QueryTypes.SELECT});
+      console.log(classes,'<<<classes');
+      res.status(200).json(classes)
     } catch (error) {
       console.log(error);
       next(error);

@@ -8,7 +8,7 @@
         </h2>
         <div style="display: flex;">
           <div class="row">
-            <div class="card" style="width: 18rem; margin-right: 10px;" v-for="kelas in classes" :key="kelas.id">
+            <div class="card" style="width: 18rem; margin-right: 10px;" v-for="kelas in classesUser" :key="kelas.id">
               <div class="card-body">
                 <h5 class="card-title">{{ kelas.className }}</h5>
                 <p class="card-text">{{ kelas.pembicara }}</p>
@@ -30,15 +30,8 @@
                 </form>
                 <br />
                 <br />
-                <button @click.prevent="activeClass(kelas.id)" type="submit" class="btn btn-secondary btn-lg" v-if="kelas.status=='Not Active' && isAdmin">
-                    Active Class
-                </button>
-                <p class="card-text" style="font-size: 12px;" v-if="kelas.status=='active' && isAdmin">Class Activated on {{ new Date(kelas.updatedAt).toLocaleDateString('en-gb',{ year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} </p>
-                <p v-if="kelas.status=='active' && isAdmin"><b> <i> Secret code : {{ kelas.classCode }} </i></b></p>
-                <button @click.prevent="finishClass(kelas.id)" type="submit" class="btn btn-secondary btn-lg" v-if="kelas.status=='active' && isAdmin">
-                    Finish Class
-                </button>
-                <p class="card-text" style="font-size: 12px;" v-if="kelas.status=='finish'">Class mark as Finished on {{ new Date(kelas.updatedAt).toLocaleDateString('en-gb',{ year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} </p>
+                <p class="card-text" style="font-size: 12px;" v-if="kelas.attendanceType=='hadir'">You have submited absen : Hadir at {{ new Date(kelas.attendanceDate).toLocaleDateString('en-gb',{ year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }} </p>
+                <p class="card-text" style="font-size: 12px;" v-if="kelas.attendanceType=='izin'">You have submited absen : Izin with remark {{ kelas.remarks }} </p>
               </div>
             </div>
           </div>
@@ -72,7 +65,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('getClass')
+    this.$store.dispatch('getClassUser')
     if (localStorage.getItem('role') === 'Admin') {
       this.isAdmin = true
     } else {
@@ -215,8 +208,8 @@ export default {
     }
   },
   computed: {
-    classes () {
-      return this.$store.state.classes
+    classesUser () {
+      return this.$store.state.classesUser
     },
     baseUrl () {
       return this.$store.state.baseUrl
